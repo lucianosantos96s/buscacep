@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca Cep Javascript</title>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        .top {
+            font-size: 1em;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 2px #ccc;
+        }
+
+        .form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 90vh;
+        }
+
+        .form input {
+            display:block;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="top">
+        <h1>BuscaCEP</h1>
+    </div>
+
+    <div class="form">
+        <form action="" method="post">
+            <label for="cep" >CEP</label>
+            <input type="text" id="cep" name="cep">
+            <label for="logradouro">Logradouro</label>
+            <input type="text" id="logradouro" name="logradouro" disabled>
+            <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" name="bairro" disabled>
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" disabled>
+            <label for="estado">Estado</label>
+            <input type="text" id="estado" name="estado" disabled>
+        </form>
+    </div>
+    
+    <script>
+
+         async function buscaCEP() {
+           const cep = document.getElementById('cep')
+           let logradouro = document.getElementById('logradouro')
+           let bairro = document.getElementById('bairro')
+           let cidade = document.getElementById('cidade')
+           let estado = document.getElementById('estado')
+
+           if (cep.value.length != 8){
+            if (logradouro.value.length != 0) {
+                logradouro.value = ""
+                bairro.value = ""
+                cidade.value = ""
+                estado.value = ""
+            }
+            return
+           }
+
+           const valor = await fetch(`https://viacep.com.br/ws/${cep.value}/json/`)
+           .then(resposta => resposta.json())
+           console.log(valor)
+
+           logradouro.value = valor.logradouro
+           bairro.value = valor.bairro
+           cidade.value = valor.localidade
+           estado.value = valor.uf
+        }
+
+        const cep = document.getElementById('cep')
+        cep.onmouseover = buscaCEP
+
+    </script>
+
+</body>
+</html>
